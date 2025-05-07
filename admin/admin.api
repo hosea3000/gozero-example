@@ -1,0 +1,44 @@
+syntax = "v1"
+
+type Request {
+	Name string `path:"name,options=you|me"`
+}
+
+type Response {
+	Message string `json:"message"`
+}
+
+type LoginReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResp {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+service admin-api {
+	@handler AdminHandler
+	get /from/:name (Request) returns (Response)
+
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+}
+
+type UserInfoReq {
+	ID string `json:"id"`
+}
+
+type UserInfoResp {
+	Name string `json:"name"`
+}
+
+@server (
+	jwt: Auth // 开启 jwt 认证
+)
+service admin-api {
+	@handler userInfo
+	post /user/info (UserInfoReq) returns (UserInfoResp)
+}
+

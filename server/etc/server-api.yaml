@@ -1,0 +1,8 @@
+Name: server-api
+Host: 0.0.0.0
+Port: 8080
+DB:
+  DSN: "hosea:123456@tcp(127.0.0.1:3306)/my_database?charset=utf8mb4&parseTime=True&loc=Local"
+
+Auth:
+  SignatureExpireMinutes: 60

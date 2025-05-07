@@ -1,0 +1,59 @@
+syntax = "v1"
+
+type (
+	ImageFlagReq {
+		ImageBase64 string  `json:"imageBase64"`
+		ImageUrl    string  `json:"imageUrl"`
+		Confidence  float64 `json:"confidence"`
+	}
+	ImageFlagResp {
+		Name       string  `json:"name"`
+		Confidence float64 `json:"confidence"`
+	}
+)
+
+// 定义 HTTP 服务
+// @server 语法块主要用于控制对 HTTP 服务生成时 meta 信息，目前支持功能有：
+// 1. 路由分组
+// 2. 中间件声明
+// 3. 路由前缀
+// 4. 超时配置
+// 5. jwt 鉴权开关
+// 所有声明仅对当前 service 中的路由有效
+@server (
+	// 代表当前 service 代码块下的路由生成代码时都会被放到 login 目录下
+	group: image
+	// 定义路由前缀为 "/v1"
+	prefix:     /v1
+	middleware: Auth,CallLog
+	timeout:    30s
+	// 定义一个请求体限制在 10MB 以内的请求
+	maxBytes: 10485760
+)
+// 微服务名称为 user，生成的代码目录和配置文件将和 user 值相关
+service server-api {
+	// 定义 http.HandleFunc 转换的 go 文件名称及方法，每个接口都会跟一个 handler
+	@handler flagHandler
+	// 定义接口
+	// 请求方法为 post
+	// 路由为 /user/login
+	// 请求体为 LoginReq
+	// 响应体为 LoginResp，响应体必须有 returns 关键字修饰
+	post /image/flag (ImageFlagReq) returns ([]ImageFlagResp)
+}
+
+type HelloReq {}
+
+type HelloResp {
+	Res interface{} `json:"res"`
+}
+
+@server (
+	prefix:     /v1
+	middleware: Auth,CallLog
+)
+service server-api {
+	@handler hello
+	post /hello (HelloReq) returns (HelloResp)
+}
+

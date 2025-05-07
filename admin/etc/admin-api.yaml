@@ -1,0 +1,9 @@
+Name: admin-api
+Host: 0.0.0.0
+Port: 8888
+Auth:
+  AccessSecret: "xxxxxxxxxxxxxxer2e232"
+  AccessExpire: 3600
+
+DB:
+  DSN: "hosea:123456@tcp(127.0.0.1:3306)/my_database?charset=utf8mb4&parseTime=True&loc=Local"
